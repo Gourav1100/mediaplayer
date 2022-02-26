@@ -1,0 +1,15 @@
+#!/bin/bash
+
+pkill -f "node"
+pkill -f "electron"
+clear
+cd ./frontend
+npm start &
+sleep 7
+cd ..
+clear
+npm run electron
+pkill -f "node"
+pkill -f "electron"
+^C
+clear

@@ -1,0 +1,16 @@
+.Brand {
+    padding: 0 3em 0 3em ;
+}
+.dropdown {
+    text-align: center;
+}
+.link {
+    text-decoration: none;
+    color: white;
+}
+.link:hover {
+    color: white;
+}
+.nav {
+    text-align: center;
+}

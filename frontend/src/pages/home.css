@@ -1,0 +1,197 @@
+.wrapper{
+    overflow-y: scroll ;
+    background-color: #2d3436;
+    z-index: -1;
+    margin: 0.2em 0 0.2em 0;
+    padding: 1em;
+    color: white;
+    opacity: 0.95;
+    text-align: center;
+    bottom: 1.2em;
+    right: 0;
+    left: 0;
+    top: 3.5em;
+    position: fixed;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+.wrapper::-webkit-scrollbar {
+    display: none;
+}
+.submiturl {
+    padding: 1em;
+    width: 100%;
+    border-radius: 10px;
+    border: 1px solid #0066cc;
+    background-color: #0099cc;
+    color: #ffffff;
+    padding: 1em;
+}
+.submiturl:hover {
+    border: 1px solid #0099cc;
+    background-color: #00aacc;
+}
+
+.submiturl:disabled,
+.submiturl[disabled]{
+    border: 1px solid #999999;
+    background-color: #cccccc;
+    color: #666666;
+}
+.url {
+    width: 100%;
+    padding: 1em;
+    border-radius: 10px;
+}
+.urlcontainer {
+    padding: 0.5em 0.15em;
+}
+.file {
+    visibility: hidden;
+    width: 0;
+}
+.filename {
+    user-select: none;
+    overflow: hidden;
+    font-family: 'Courier New', Courier, monospace;
+    font-weight: 600;
+    margin-top: x-large;
+    display: none;
+    margin-top: 2em;
+}
+.formbody {
+    border: 2px solid whitesmoke;
+    background-color: rgba(255,255,255,0.25);
+    padding: 8em;
+    margin: 2em 16em 2em 16em;
+}
+.play{
+    display: none;
+}
+.playbtn {
+    padding: 2em;
+    text-align: center;
+    border: 12px solid black;
+    border-radius: 50%;
+    background-color: rgba(255,255,255,0.3);
+    animation: reverse_slowdown 1s;
+}
+.playbtn:hover {
+    animation: slowdown 1s;
+    background-color: #166da079;
+}
+.playfile {
+    width: 10em;
+    margin-left: 1em;
+    height: auto;
+}
+.uploadinfo, .urlinfo {
+    user-select: none;
+    margin-bottom: 1em;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: x-large;
+}
+.uploadfile {
+    filter: invert(100%);
+    width: 10em;
+    margin-left: 1em;
+    height: auto;
+}
+.uploadfile:hover {
+    filter: invert(0%);
+    animation: invertcolor 0.5s;
+}
+@keyframes invertcolor {
+    from {
+        filter: invert(100%);
+    }
+    to {
+        filter: invert(0%);
+    }
+}
+@keyframes reverse_slowdown {
+    from {
+        background-color: #166da079;
+        transform: rotate(360deg);
+    }
+    to {
+        background-color: rgba(255,255,255,0.3);
+        transform: rotate(0deg);
+    }
+}
+@keyframes slowdown {
+    from {
+        transform: rotate(0deg);
+        background-color: rgba(255,255,255,0.3);
+    }
+    to {
+        transform: rotate(360deg);
+        background-color: #166da079;
+    }
+}
+@media only screen and (max-width:1100px) {
+    .filename {
+        font-size: x-large;
+    }
+    .formbody {
+        margin: 2em 6em 2em 6em;
+        padding: 4em;
+    }
+    .playbtn {
+        border: 10px solid black;
+        padding: 1.5em;
+    }
+    .playfile {
+        width: 8em;
+    }
+    .uploadfile {
+        width: 8em;
+    }
+    .uploadinfo, .urlinfo {
+        font-size: x-large;
+    }
+}
+@media only screen and (max-width:800px) {
+    .filename {
+        font-size: medium;
+    }
+    .formbody {
+        padding: 4em 2em 4em 2em;
+        margin: 2em 2em 2em 2em;
+    }
+    .playbtn {
+        border: 7px solid black;
+        padding: 1.5em;
+    }
+    .playfile {
+        width: 6em;
+    }
+    .uploadfile {
+        width: 6em;
+    }
+    .uploadinfo, .urlinfo {
+        font-size: large;
+    }
+}
+@media only screen and (max-width: 400px){
+    .filename {
+        font-size: small;
+    }
+    .formbody {
+        padding: 4em 1em 4em 1em;
+        margin: 1em 0.25em 1em 0.25em;
+    }
+    .playbtn {
+        border:5px solid black;
+        padding: 1em;
+    }
+    .playfile {
+        width: 5em;
+    }
+    .uploadfile {
+        width: 4em;
+    }
+    .uploadinfo, .urlinfo {
+        font-size: small;
+    }
+}

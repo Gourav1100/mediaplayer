@@ -1,0 +1,10 @@
+.Cfooter {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    font-size: 0.5em;
+    text-align: center;
+    background-color: whitesmoke;
+    border-top: 1px solid black;
+}
