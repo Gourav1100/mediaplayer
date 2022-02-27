@@ -35,6 +35,10 @@ class Player extends React.Component {
     changetime = () => {
         var value = document.getElementById("mySlider").value;
         this.video.currentTime = (value*this.video.duration)/100;
+        this.video.play();
+        if(this.audiosource !== ''){
+            this.audio.currentTime = (value*this.video.duration)/100;
+        }
         this.updateval();
     }
     updateval = () => {
@@ -72,7 +76,7 @@ class Player extends React.Component {
     }
     toggle = () => {
         var play = document.getElementById("playpause");
-        if( this.playstate == 1 ){
+        if( this.playstate === 1 ){
             this.playstate = 0;
             play.src = require("../icons/play.png");
             this.video.pause();
