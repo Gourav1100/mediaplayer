@@ -100,7 +100,8 @@
 }
 .videoplayer {
   position: absolute;
-  top: 45%;
+  top: 45vh;
+  transform: translateY(-50vh);
   left: 0;
   right: 0;
 }
