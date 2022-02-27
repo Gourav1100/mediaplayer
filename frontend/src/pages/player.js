@@ -1,5 +1,4 @@
 // React Modules
-import { entries } from "lodash";
 import React from "react";
 // Bootstrap Module
 import { Col, Container, Row } from "react-bootstrap";
@@ -11,13 +10,19 @@ import './player.css';
 class Player extends React.Component {
     constructor() {
         super();
+        this.videodata = {};
         this.State = {
             slidervalue: 0
         };
-        if( sessionStorage.getItem('remote') != 0 ){
-            if(sessionStorage.getItem('remote') == 1 ){
-            }
-        }
+    }
+    reset = (id1,id2) => {
+        this.video = document.getElementById(id1);
+        this.audio = document.getElementById(id2);
+        this.video.currentTime = 0;
+        this.audio.currentTime = 0;
+        this.updateval();
+        this.video.play();
+        this.audio.play();
     }
     retval = () => {
         try {
@@ -46,18 +51,22 @@ class Player extends React.Component {
     plus30 = () => {
         if( this.video.currentTime+30 >= this.video.duration  ){
             this.video.currentTime = this.video.duration;
+            this.audio.currentTime = this.audio.duration;
         }
         else{
             this.video.currentTime += 30;
+            this.audio.currentTime += 30;
         }
         this.updateval();
     }
     minus30 = () => {
         if( this.video.currentTime-30 <= 0  ){
             this.video.currentTime = 0;
+            this.audio.currentTime = 0;
         }
         else{
             this.video.currentTime -= 30;
+            this.audio.currentTime -= 30;
         }
         this.updateval();
     }
@@ -67,11 +76,17 @@ class Player extends React.Component {
             this.playstate = 0;
             play.src = require("../icons/play.png");
             this.video.pause();
+            if(this.audiosource !== ''){
+                this.audio.pause();
+            }
         }
         else {
             this.playstate = 1;
             play.src = require("../icons/pause.png");
             this.video.play();
+            if(this.audiosource !== ''){
+                this.audio.play();
+            }
         }
     }
     render() {
@@ -99,8 +114,10 @@ class Player extends React.Component {
                                 <video id="videoplayer" className="videoplayer" width="100%" height="auto">
                                     <source id="source" src={sessionStorage.getItem('path')} type={()=>{
                                         return "video/"+sessionStorage.getItem('type');
-                                    }}>
-                                    </source>
+                                    }} />
+                                </video>
+                                <video id="audioplayer" className="audioplayer" style={{display:"none"}}>
+                                    <source id="asource" src={sessionStorage.getItem('pathaudio')} type="video/webm" />
                                 </video>
                             </div>
                         </Col>
@@ -152,26 +169,48 @@ class Player extends React.Component {
         }).observe(document.getElementById('slidercontainer'));
         document.getElementById("mySlider").value = 0;
         this.video = document.getElementById("videoplayer");
+        this.audio = document.getElementById('audioplayer');
+        this.audiosource = document.getElementById('asource').src;
         this.video.ontimeupdate = () => {
-            if(this.currentTime/this.duration != NaN){
+            if(this.currentTime/this.duration !== NaN){
                 document.getElementById("mySlider").value = (this.video.currentTime/this.video.duration)*100;
                 this.updateval();
-                if( this.video.currentTime == this.video.duration ){
+                if( this.video.currentTime === this.video.duration ){
                     this.toggle();
                 }
             }
         }
-        this.video.play();
+        if(sessionStorage.getItem('remote') === '0'){
+            this.video.play();
+        }
+        else if( sessionStorage.getItem('remote') !== '0' ){
+            if(sessionStorage.getItem('remote') === '1' ){
+                const xhttp = new XMLHttpRequest();
+                xhttp.addEventListener('load', () => {
+                    if ( xhttp.readyState === 4 && xhttp.status === 200 ){
+                        this.videodata = JSON.parse(xhttp.responseText);
+                        console.log("accepted, now loading");
+                        sessionStorage.setItem('path',this.videodata['1080p'][0]);
+                        sessionStorage.setItem('pathaudio',this.videodata['1080p'][1]);
+                        this.reset('videoplayer','audioplayer');
+                    }
+                    else{
+                        sessionStorage.setItem('path','');
+                    }
+                });
+                xhttp.open('GET','http://localhost:6900/youtube?v='+sessionStorage.getItem('id'));
+                xhttp.send();
+
+            }
+            else if( sessionStorage.getItem('remote') === '2' ){
+
+            }
+        }
     }
     setstep(){
         this.step = this.maxsize/100;
         this.updateval();
     }
-}
-// function for player
-function getValue() {
-    var slider = document.getElementById('mySlider');
-    console.log(slider.value);
 }
 // Export Player Module
 export default Player;

@@ -3,6 +3,7 @@
 pkill -f "node"
 pkill -f "electron"
 clear
+node server.js &
 cd ./frontend
 npm start &
 sleep 7

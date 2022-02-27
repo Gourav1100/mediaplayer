@@ -29,7 +29,7 @@
     top: 0;
     z-index: 1;
     animation: reverse_slowdown 1s ease;
-    background: linear-gradient(rgba(255, 255, 255, 0.432),rgba(0, 0, 0, 0.452));
+    background: linear-gradient(rgba(75, 67, 67, 0.432),rgba(0, 0, 0, 0));
 }
 .info:hover {
     opacity: 1;
@@ -93,15 +93,15 @@
     text-align: center;
 }
 .videocontainer {
-    position: fixed;
-    top: 50%;
+    position: absolute;
+    z-index: -1;
+    top: 0;
     left: 0;
     right: 0;
     bottom: 0;
 }
 .videoplayer {
     vertical-align: center;
-    margin-top: -20%;
 }
 .Wrapper {
     font-family: 'Courier New', Courier, monospace;

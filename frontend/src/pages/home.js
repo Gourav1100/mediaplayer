@@ -14,6 +14,7 @@ class Homepage extends React.Component {
     constructor() {
         super();
         sessionStorage.clear();
+        sessionStorage.setItem('pathaudio',"");
     }
     youtube_parser = (id) => {
         var url = document.getElementById(id).value;
@@ -28,8 +29,9 @@ class Homepage extends React.Component {
         sessionStorage.setItem('description',description);
         sessionStorage.setItem("from","/");
         sessionStorage.setItem("type",'mp4');
-        sessionStorage.setItem("remote",2);
+        sessionStorage.setItem("remote",1);
         sessionStorage.setItem('path',document.getElementById(id));
+        sessionStorage.setItem('id',this.youtube_parser('url'));
     }
     parse_url = () => {
         var youtube_flag = this.youtube_parser('url');
