@@ -14,6 +14,10 @@ class Player extends React.Component {
         this.State = {
             slidervalue: 0
         };
+        if( sessionStorage.getItem('remote') != 0 ){
+            if(sessionStorage.getItem('remote') == 1 ){
+            }
+        }
     }
     retval = () => {
         try {
@@ -93,7 +97,9 @@ class Player extends React.Component {
                         <Col>
                             <div className="videocontainer" id="videocontainer">
                                 <video id="videoplayer" className="videoplayer" width="100%" height="auto">
-                                    <source id="source" src={sessionStorage.getItem('path')} type="video/mp4">
+                                    <source id="source" src={sessionStorage.getItem('path')} type={()=>{
+                                        return "video/"+sessionStorage.getItem('type');
+                                    }}>
                                     </source>
                                 </video>
                             </div>
@@ -130,7 +136,7 @@ class Player extends React.Component {
 
                 </Container>
                 <Container fluid >
-                    
+
                 </Container>
             </div>
         );

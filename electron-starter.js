@@ -1,5 +1,4 @@
 const electron = require('electron');
-ELECTRON_NO_ATTACH_CONSOLE = true
 const app = electron.app;
 const BrowserWindow = electron.BrowserWindow;
 let mainWindow;
@@ -7,8 +6,11 @@ let mainWindow;
 function createWindow() {
     mainWindow = new BrowserWindow({width: 800, height: 600,autoHideMenuBar: true,webPreferences: {
         webSecurity: false
-    }});
+    },show: false});
     mainWindow.loadURL('http://localhost:3000');
+    mainWindow.webContents.on('did-finish-load',() => {
+        mainWindow.show();
+    });
     mainWindow.on('closed', function () {
         mainWindow = null
         app.quit();

@@ -11,11 +11,25 @@ import Cfooter from "../footer/cfooter";
 import './home.css';
 
 class Homepage extends React.Component {
+    constructor() {
+        super();
+        sessionStorage.clear();
+    }
     youtube_parser = (id) => {
         var url = document.getElementById(id).value;
         var regExp = /youtu(?:.*\/v\/|.*v\=|\.be\/)([A-Za-z0-9_\-]{11})/;
         var match = url.match(regExp);
         return ( match !== null && match[1].length === 11 ) ? match[1] : false;
+    }
+    setyoutubeenv = (id) => {
+        var title = this.youtubedetails.channelTitle + " : " + this.youtubedetails.title ;
+        var description = this.youtubedetails.description;
+        sessionStorage.setItem('title',title);
+        sessionStorage.setItem('description',description);
+        sessionStorage.setItem("from","/");
+        sessionStorage.setItem("type",'mp4');
+        sessionStorage.setItem("remote",2);
+        sessionStorage.setItem('path',document.getElementById(id));
     }
     parse_url = () => {
         var youtube_flag = this.youtube_parser('url');
@@ -23,9 +37,11 @@ class Homepage extends React.Component {
             var youtube_vid = youtube_flag;
             var xhttp = new XMLHttpRequest();
             xhttp.addEventListener('load', () => {
-                console.log(xhttp.responseText);
                 if( xhttp.responseText !== "404" ){
-                    this.youtubedetails = JSON.parse(xhttp.responseText);
+                    this.youtubedetails = JSON.parse(xhttp.responseText).items[0].snippet;
+                    this.setyoutubeenv('url');
+                    // redirect
+                    this.props.navigate('/player');
                 }
                 else{
                     console.log("Internal Server Error");
@@ -33,6 +49,13 @@ class Homepage extends React.Component {
             });
             xhttp.open('GET','https://YoutubeDetailReporter.gauravbidhuri.repl.co/id='+youtube_vid);
             xhttp.send();
+        }
+        else if( this.magnetparse('url') ){
+            // url contains torrent magnet link
+
+        }
+        else{
+            // other type of url
         }
     }
     magnetparse = (id) => {
