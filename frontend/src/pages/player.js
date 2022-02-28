@@ -191,6 +191,9 @@ class Player extends React.Component {
         this.video.oncanplay = () => {
             if(this.playstate == 1){
                 this.video.play();
+                if(this.audiosource != ""){
+                    this.audio.play();
+                }
             }
         }
         this.audio.ontimeupdate = () => {
