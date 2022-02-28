@@ -27,7 +27,6 @@ class Homepage extends React.Component {
         var description = this.youtubedetails.description;
         sessionStorage.setItem('title',title);
         sessionStorage.setItem('description',description);
-        sessionStorage.setItem("from","/");
         sessionStorage.setItem("type",'mp4');
         sessionStorage.setItem("remote",1);
         sessionStorage.setItem('path',document.getElementById(id));
@@ -114,7 +113,6 @@ class Homepage extends React.Component {
         // set session vairables
         sessionStorage.setItem("path","file://"+file);
         sessionStorage.setItem("title",filename);
-        sessionStorage.setItem("from","/");
         sessionStorage.setItem("type",type);
         sessionStorage.setItem("remote",0);
         // redirect

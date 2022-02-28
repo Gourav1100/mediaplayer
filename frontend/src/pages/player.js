@@ -18,10 +18,12 @@ class Player extends React.Component {
     reset = (id1,id2) => {
         this.video = document.getElementById(id1);
         this.audio = document.getElementById(id2);
+        this.video.preload = "1%";
+        this.audio.preload = "1%";
         this.video.currentTime = 0;
         this.audio.currentTime = 0;
         this.updateval();
-        this.video.play();
+        this.video.pause();
     }
     retval = () => {
         try {
@@ -90,7 +92,7 @@ class Player extends React.Component {
                 <Container fluid>
                     <Row className="info">
                         <Col xs={1} className="logo-container">
-                            <Link to={sessionStorage.getItem('from')} >
+                            <Link to={"/"} >
                                 <img className="logo" src={require("../icons/backarrow.png")} />
                             </Link>
                         </Col>
@@ -105,8 +107,8 @@ class Player extends React.Component {
                     </Row>
                     <Row>
                         <Col>
-                            <div className="videocontainer" id="videocontainer">
-                                <video id="videoplayer" className="videoplayer" width="100%" height="auto">
+                            <div className="videocontainer">
+                                <video id="videoplayer" className="videoplayer">
                                     <source id="source" src={sessionStorage.getItem('path')} type={()=>{
                                         return "video/"+sessionStorage.getItem('type');
                                     }} />
@@ -167,10 +169,11 @@ class Player extends React.Component {
         this.audio = document.getElementById('audioplayer');
         this.audiosource = document.getElementById('asource').src;
         this.video.ontimeupdate = () => {
-            if(this.currentTime/this.duration !== NaN){
+            if(this.video.currentTime/this.video.duration !== NaN){
                 document.getElementById("mySlider").value = (this.video.currentTime/this.video.duration)*100;
                 this.updateval();
                 if( this.video.currentTime === this.video.duration ){
+                    this.audio.currentTime = this.audio.duration;
                     this.toggle();
                 }
             }
@@ -185,18 +188,19 @@ class Player extends React.Component {
                 this.audio.play();
             }
         });
-        this.video.addEventListener("progress", () => {
+        this.video.oncanplay = () => {
             if(this.playstate == 1){
-                var buffered = 100*(this.video.buffered.end(0)/this.video.duration);
-                var abuffered = 100*(this.audio.buffered.end(0)/this.audio.duration);
-                if( buffered < 1 || abuffered < 1){
-                    this.video.pause();
-                }
-                else {
-                    this.video.play();
-                }
+                this.video.play();
             }
-        })
+        }
+        this.audio.ontimeupdate = () => {
+            if( ((this.audio.currentTime-this.video.currentTime)*100) / this.video.currentTime > 5 ){
+                while(((this.audio.currentTime-this.video.currentTime)*100) / this.video.currentTime > 5){
+                    this.audio.currentTime -= 0.01;
+                }
+                this.video.pause();
+            }
+        }
         if(sessionStorage.getItem('remote') === '0'){
             this.video.play();
         }
