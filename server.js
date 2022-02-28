@@ -1,6 +1,5 @@
 var http = require('http');
 var url = require('url');
-const fs = require('fs');
 const youtubedl = require('youtube-dl-exec');
 
 http.createServer((req,res) => {

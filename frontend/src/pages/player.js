@@ -22,7 +22,6 @@ class Player extends React.Component {
         this.audio.currentTime = 0;
         this.updateval();
         this.video.play();
-        this.audio.play();
     }
     retval = () => {
         try {
@@ -35,10 +34,8 @@ class Player extends React.Component {
     changetime = () => {
         var value = document.getElementById("mySlider").value;
         this.video.currentTime = (value*this.video.duration)/100;
-        this.video.play();
-        if(this.audiosource !== ''){
-            this.audio.currentTime = (value*this.video.duration)/100;
-        }
+        this.audio.currentTime = (value*this.audio.duration)/100;
+        this.video.pause();
         this.updateval();
     }
     updateval = () => {
@@ -80,17 +77,11 @@ class Player extends React.Component {
             this.playstate = 0;
             play.src = require("../icons/play.png");
             this.video.pause();
-            if(this.audiosource !== ''){
-                this.audio.pause();
-            }
         }
         else {
             this.playstate = 1;
             play.src = require("../icons/pause.png");
             this.video.play();
-            if(this.audiosource !== ''){
-                this.audio.play();
-            }
         }
     }
     render() {
@@ -184,27 +175,37 @@ class Player extends React.Component {
                 }
             }
         }
+        this.video.addEventListener("pause", () => {
+            if(this.audiosource != ""){
+                this.audio.pause();
+            }
+        });
+        this.video.addEventListener("play", () => {
+            if(this.audiosource != ""){
+                this.audio.play();
+            }
+        });
+        this.video.addEventListener("progress", () => {
+            if(this.playstate == 1){
+                var buffered = 100*(this.video.buffered.end(0)/this.video.duration);
+                var abuffered = 100*(this.audio.buffered.end(0)/this.audio.duration);
+                if( buffered < 1 || abuffered < 1){
+                    this.video.pause();
+                }
+                else {
+                    this.video.play();
+                }
+            }
+        })
         if(sessionStorage.getItem('remote') === '0'){
             this.video.play();
         }
         else if( sessionStorage.getItem('remote') !== '0' ){
             if(sessionStorage.getItem('remote') === '1' ){
-                const xhttp = new XMLHttpRequest();
-                xhttp.addEventListener('load', () => {
-                    if ( xhttp.readyState === 4 && xhttp.status === 200 ){
-                        this.videodata = JSON.parse(xhttp.responseText);
-                        console.log("accepted, now loading");
-                        sessionStorage.setItem('path',this.videodata['1080p'][0]);
-                        sessionStorage.setItem('pathaudio',this.videodata['1080p'][1]);
-                        this.reset('videoplayer','audioplayer');
-                    }
-                    else{
-                        sessionStorage.setItem('path','');
-                    }
-                });
-                xhttp.open('GET','http://localhost:6900/youtube?v='+sessionStorage.getItem('id'));
-                xhttp.send();
-
+                this.videodata = JSON.parse(sessionStorage.getItem('videodata'));
+                sessionStorage.setItem('path',this.videodata['1080p'][0]);
+                sessionStorage.setItem('pathaudio',this.videodata['1080p'][1]);
+                this.reset('videoplayer','audioplayer');
             }
             else if( sessionStorage.getItem('remote') === '2' ){
 

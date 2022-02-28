@@ -32,6 +32,18 @@ class Homepage extends React.Component {
         sessionStorage.setItem("remote",1);
         sessionStorage.setItem('path',document.getElementById(id));
         sessionStorage.setItem('id',this.youtube_parser('url'));
+        const xhttp = new XMLHttpRequest();
+        xhttp.addEventListener('load', () => {
+            console.log(xhttp.readyState);
+            if ( xhttp.readyState === 4 && xhttp.status === 200 ){
+                sessionStorage.setItem('videodata',xhttp.responseText);
+                console.log("accepted, now loading");
+                // redirect
+                this.props.navigate('/player');
+            }
+        });
+        xhttp.open('GET','http://localhost:6900/youtube?v='+sessionStorage.getItem('id'));
+        xhttp.send();
     }
     parse_url = () => {
         var youtube_flag = this.youtube_parser('url');
@@ -41,9 +53,8 @@ class Homepage extends React.Component {
             xhttp.addEventListener('load', () => {
                 if( xhttp.responseText !== "404" ){
                     this.youtubedetails = JSON.parse(xhttp.responseText).items[0].snippet;
+                    console.log("loading...");
                     this.setyoutubeenv('url');
-                    // redirect
-                    this.props.navigate('/player');
                 }
                 else{
                     console.log("Internal Server Error");
